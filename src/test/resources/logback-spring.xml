@@ -1,13 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <configuration>
-    <springProperty scope="context" name="LOGGING_APPENDER" source="logging.appender"/>
-    <springProperty scope="context" name="LOG_FILE_PATH" source="logging.file.path"/>
-    <springProperty scope="context" name="LOGGING_FILE_NAME_APPLICATION"
-        source="logging.file.application"/>
-
-    <property name="LOG_PATTERN_FILE_APPLICATION"
-        value="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level ${hostname} %X{REQUEST_ID} %X{HTTP_METHOD} %X{REQUEST_URI} %X{GROUP_TYPE_NUMBER} %X{SERVICE_API_KEY} %X{USER_ID} %X{GROUP_ID} %X{SESSION_ID}  %c{2} : %msg%n"/>
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
         <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
             <providers>
@@ -17,14 +10,6 @@
                         "type":"%X{TYPE:-application}",
                         "eventTime":"%d{yyyy-MM-dd HH:mm:ss.SSS}",
                         "hostName":"${hostname}",
-                        "requestId":"%X{REQUEST_ID}",
-                        "httpMethod":"%X{HTTP_METHOD}",
-                        "requestUri":"%X{REQUEST_URI}",
-                        "groupTypeNumber":"%X{GROUP_TYPE_NUMBER}",
-                        "serviceApiKey":"%X{SERVICE_API_KEY}",
-                        "userId":"%X{USER_ID}",
-                        "groupId":"%X{GROUP_ID}",
-                        "sessionId":"%X{SESSION_ID}",
                         "level": "%level",
                         "logger": "%logger",
                         "message":"%msg",

@@ -7,9 +7,11 @@ import io.github.mitsumi.solutions.spring.dbunit.postgres.test.loaders.Replaceme
 import io.github.mitsumi.solutions.spring.dbunit.postgres.test.operations.DbOperationLookup;
 import io.github.mitsumi.solutions.spring.json.accessors.JsonPathAccessorFactory;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.bean.override.mockito.MockitoResetTestExecutionListener;
@@ -35,15 +37,17 @@ import static org.hamcrest.Matchers.notNullValue;
     dataSetLoader = ReplacementCsvDataSetLoader.class,
     databaseOperationLookup = DbOperationLookup.class
 )
+@Import({TestDbUnitConfig.class})
 @DatabaseSetup(value = "/test-data/io.github.mitsumi.solutions.spring.dbunit.postgres.test.TestDbUnit/")
+@Slf4j
 public class TestDbUnit {
 
     @Autowired
     private DatabaseDataSourceConnectionFactoryBean connectionFactoryBean;
 
-    @Autowired
-    private JsonPathAccessorFactory jsonPathAccessorFactory;
+    private final JsonPathAccessorFactory jsonPathAccessorFactory = new JsonPathAccessorFactory();
 
+    @SuppressWarnings("SqlNoDataSourceInspection")
     @SneakyThrows
     @Test
     public void test_dbUnit_loaded() {
@@ -116,6 +120,8 @@ public class TestDbUnit {
 
                 assertThat(actualUsers.getDate("created_at"), is(notNullValue()));
                 assertThat(actualUsers.getDate("updated_at"), is(notNullValue()));
+
+                log.debug("user_id: {}", actualUsers.getString("user_id"));
             }
         }
     }
