@@ -19,6 +19,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+    - uses: hoverkraft-tech/compose-action@v2.0.1
+      with:
+        compose-file: './.spring-dbunit-postgres-dev-container/compose.yml'
     - name: Set up JDK 21
       uses: actions/setup-java@v4
       with:
