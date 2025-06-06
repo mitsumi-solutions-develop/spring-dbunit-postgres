@@ -58,6 +58,8 @@
         <janino.version>3.1.12</janino.version>
         <logback.version>1.5.18</logback.version>
         <slf4j.version>2.0.17</slf4j.version>
+        <hibernate.version>7.0.0.Final</hibernate.version>
+        <jakarta.persistence.version>3.2.0</jakarta.persistence.version>
         <mitsumi-solutions-spring-json.version>1.0.5</mitsumi-solutions-spring-json.version>
     </properties>
     <distributionManagement>
@@ -167,6 +169,18 @@
             <groupId>net.logstash.logback</groupId>
             <artifactId>logstash-logback-encoder</artifactId>
             <version>${logstash-logback-encoder.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.hibernate.orm/hibernate-core -->
+        <dependency>
+            <groupId>org.hibernate.orm</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>${hibernate.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/jakarta.persistence/jakarta.persistence-api -->
+        <dependency>
+            <groupId>jakarta.persistence</groupId>
+            <artifactId>jakarta.persistence-api</artifactId>
+            <version>${jakarta.persistence.version}</version>
         </dependency>
         <dependency>
             <groupId>io.github.mitsumi-solutions-develop</groupId>
