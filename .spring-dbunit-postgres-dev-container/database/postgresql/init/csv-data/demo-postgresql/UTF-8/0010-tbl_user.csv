@@ -1,0 +1,2 @@
+user_id,user_key,user_type,username,password,user_profile,created_at,updated_at
+1,6c6d35e2-fafa-4358-a831-e1a853b4bc8a,user,test+20250323.001@local.jp,password,"{""family_name"":""demo family name"", ""given_name"":""demo given name"",""gender"":""male"",""birthday"":""1995-02-07"",""address"":{""formatted"":""101-0041\n東京都千代田区神田須田町１丁目７番８号 VORT秋葉原Ⅳ ２Ｆ"",""postal_code"":""101-0041"",""country"":""日本"",""region"":""東京都"",""locality"":""千代田区"",""street_address"":""神田須田町１丁目７番８号 VORT秋葉原Ⅳ ２Ｆ""}}",[now],[now]

@@ -1,0 +1,73 @@
+﻿# A5:ER FORMAT:19
+# A5:ER ENCODING:UTF8
+# A5:ER Mk-1 Copyright © 2007 m.matsubara
+# A5:SQL Mk-2 Version 2.20.2 Copyright © 1997 - 2025 m.matsubara
+#  https://a5m2.mmatsubara.com
+
+[Manager]
+ProjectName=demo-postgresql
+Author=
+MaxEntityRowShow=1000
+ReadOnlyRecommend=0
+Page=Main
+PageInfo="Main",7,"A3Landscape",$FFFFFF
+LogicalView=1
+DecodeDomain=0
+ViewModePageIndividually=1
+ViewMode=7
+ViewFormat=0
+UseNondependenceDashLine=0
+FontName=Tahoma
+FontSize=6
+PaperSize=A4Landscape
+HeaderLeft=
+HeaderCenter=
+HeaderRight=
+FooterLeft=
+FooterCenter=
+FooterRight=
+ShowPageoutRelation=1
+RDBMSType=7
+RDBMSTypeName=PostgreSQL
+GenerateDropTableStatement=1
+DropTableIfExists=1
+CreatePkIndex=1
+CreateFk=1
+FkOnDeleteOption=no action
+FkOnUpdateOption=no action
+FKParentIndex=1
+DefaultPkName=%0:s_PKC
+DefaultPkIndexName=%0:s_PKI
+DefaultIndexName=%0:s_IX%1:d
+DefaultFkName=%0:s_FK%1:d
+SqlSeparator=0
+UpperCaseKeyword=0
+ShowTag=1
+ShowCommonAttributes=0
+BugFixEntityWidth=1
+
+[Entity]
+PName=tbl_user
+LName=UserTable
+Comment=
+TableInnerOption=
+TableOption=
+Page=Main
+Left=750
+Top=400
+Field="UserId","user_id","bigserial","NOT NULL",0,"","",$FFFFFFFF,""
+Field="UserKey(UK1)","user_key","uuid","NOT NULL",,"","",$FFFFFFFF,""
+Field="UserType","user_type","enum","NOT NULL",,"","",$FFFFFFFF,""
+Field="Username(UK2)","username","@VARCHAR(512)","NOT NULL",,"","",$FFFFFFFF,""
+Field="Password","password","@VARCHAR(512)","NOT NULL",,"","",$FFFFFFFF,""
+Field="UserProfile","user_profile","jsonb","NOT NULL",,"","",$FFFFFFFF,""
+Field="CreatedAt","created_at","timestamp with time zone","NOT NULL",,"","",$FFFFFFFF,""
+Field="UpdatedAt","updated_at","timestamp with time zone","NOT NULL",,"","",$FFFFFFFF,""
+Index=tbl_user_uk1=1,user_key
+Index=tbl_user_uk2=1,username
+EffectMode=None
+Color=$000000
+BkColor=$FFFFFF
+ModifiedDateTime=20250327025341
+Position="Main",750,400,844,240
+ZOrder=1

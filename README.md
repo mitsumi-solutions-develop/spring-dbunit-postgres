@@ -5,3 +5,8 @@
 # supported version
 
 - java : 21
+- spring boot: 3.5.0
+
+# usage
+
+see: `TestDbUnit`
