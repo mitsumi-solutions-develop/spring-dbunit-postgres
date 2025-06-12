@@ -2,11 +2,14 @@ package io.github.mitsumi.solutions.spring.dbunit.postgres.test.operations;
 
 import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.operation.DefaultDatabaseOperationLookup;
+import lombok.NoArgsConstructor;
 import org.dbunit.operation.CompositeOperation;
 
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 
+@NoArgsConstructor
+@SuppressWarnings("PMD.CommentRequired")
 public class DbOperationLookup extends DefaultDatabaseOperationLookup {
     private static final Map<DatabaseOperation, org.dbunit.operation.DatabaseOperation> OPERATION_LOOKUP;
 
@@ -19,7 +22,7 @@ public class DbOperationLookup extends DefaultDatabaseOperationLookup {
     );
 
     static {
-        OPERATION_LOOKUP = new HashMap<>();
+        OPERATION_LOOKUP = new EnumMap<>(DatabaseOperation.class);
         OPERATION_LOOKUP.put(DatabaseOperation.UPDATE, org.dbunit.operation.DatabaseOperation.UPDATE);
         OPERATION_LOOKUP.put(DatabaseOperation.INSERT, org.dbunit.operation.DatabaseOperation.INSERT);
         OPERATION_LOOKUP.put(DatabaseOperation.REFRESH, org.dbunit.operation.DatabaseOperation.REFRESH);
@@ -30,7 +33,7 @@ public class DbOperationLookup extends DefaultDatabaseOperationLookup {
     }
 
     @Override
-    public org.dbunit.operation.DatabaseOperation get(DatabaseOperation operation) {
+    public org.dbunit.operation.DatabaseOperation get(final DatabaseOperation operation) {
         return OPERATION_LOOKUP.get(operation);
     }
 }

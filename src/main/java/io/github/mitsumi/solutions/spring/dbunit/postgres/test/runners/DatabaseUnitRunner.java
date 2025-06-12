@@ -8,6 +8,7 @@ import com.github.springtestdbunit.annotation.DatabaseSetups;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 import com.github.springtestdbunit.dataset.DataSetModifier;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
@@ -23,28 +24,32 @@ import java.lang.reflect.AnnotatedElement;
 import java.util.*;
 
 @Slf4j
+@NoArgsConstructor
+@SuppressWarnings({"PMD.UseExplicitTypes", "PMD.LawOfDemeter", "PMD.CommentRequired"})
 public class DatabaseUnitRunner extends DbUnitRunner {
 
-    public void beforeTestMethod(DbUnitTestContext testContext) {
-        var annotations = Annotations.get(testContext);
+    @Override
+    public void beforeTestMethod(final DbUnitTestContext testContext) {
+        final var annotations = Annotations.get(testContext);
         setupOrTeardown(testContext, AnnotationAttributes.get(annotations));
     }
 
     @SneakyThrows
-    private void setupOrTeardown(DbUnitTestContext testContext,
-                                 Collection<AnnotationAttributes> annotations) {
-        var connections = testContext.getConnections();
-        for (AnnotationAttributes annotation : annotations) {
-            var datasets = loadDataSets(testContext, annotation);
-            var operation = annotation.type();
-            var dbUnitOperation = getDbUnitDatabaseOperation(testContext, operation);
+    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
+    private void setupOrTeardown(final DbUnitTestContext testContext,
+                                 final Collection<AnnotationAttributes> annotations) {
+        final var connections = testContext.getConnections();
+        for (final AnnotationAttributes annotation : annotations) {
+            final var datasets = loadDataSets(testContext, annotation);
+            final var operation = annotation.type();
+            final var dbUnitOperation = getDbUnitDatabaseOperation(testContext, operation);
             if (!datasets.isEmpty()) {
                 if (log.isDebugEnabled()) {
                     log.debug("Executing Setup of @DatabaseTest using {} on {}", operation, datasets);
                 }
 
-                var connection = connections.get(annotation.connection());
-                var dataSet = new CompositeDataSet(datasets.toArray(new IDataSet[0]));
+                final var connection = connections.get(annotation.connection());
+                final var dataSet = new CompositeDataSet(datasets.toArray(new IDataSet[0]));
                 dbUnitOperation.execute(connection, dataSet);
                 connection.getConnection().close();
                 connection.close();
@@ -53,14 +58,16 @@ public class DatabaseUnitRunner extends DbUnitRunner {
     }
 
     @SneakyThrows
-    private IDataSet getFullDatabaseDataSet(DbUnitTestContext testContext, String name) {
+    private IDataSet getFullDatabaseDataSet(final DbUnitTestContext testContext,
+                                            final String name) {
         return testContext.getConnections().get(name).createDataSet();
     }
 
-    private List<IDataSet> loadDataSets(DbUnitTestContext testContext, AnnotationAttributes annotation) {
-        var datasets = new ArrayList<IDataSet>();
-        for (String dataSetLocation : annotation.value()) {
-            datasets.add(loadDataset(testContext, dataSetLocation));
+    private List<IDataSet> loadDataSets(final DbUnitTestContext testContext,
+                                        final AnnotationAttributes annotation) {
+        final var datasets = new ArrayList<IDataSet>();
+        for (final String location : annotation.value()) {
+            datasets.add(loadDataset(testContext, location));
         }
         if (datasets.isEmpty()) {
             datasets.add(getFullDatabaseDataSet(testContext, annotation.connection()));
@@ -69,20 +76,21 @@ public class DatabaseUnitRunner extends DbUnitRunner {
     }
 
     @SneakyThrows
-    private IDataSet loadDataset(DbUnitTestContext testContext, String dataSetLocation) {
-        var dataSetLoader = testContext.getDataSetLoader();
+    private IDataSet loadDataset(final DbUnitTestContext testContext,
+                                 final String dataSetLocation) {
+        final var dataSetLoader = testContext.getDataSetLoader();
         if (StringUtils.hasLength(dataSetLocation)) {
-            var dataSet = DataSetModifier.NONE.modify(dataSetLoader.loadDataSet(testContext.getTestClass(), dataSetLocation));
+            final var dataSet = DataSetModifier.NONE.modify(dataSetLoader.loadDataSet(testContext.getTestClass(), dataSetLocation));
             Assert.notNull(dataSet,
                 "Unable to load dataset from \"" + dataSetLocation + "\" using " + dataSetLoader.getClass());
             return dataSet;
         }
-        return null;
+        throw new IllegalStateException("Unable to load dataset from \"" + dataSetLocation + "\".");
     }
 
-    private org.dbunit.operation.DatabaseOperation getDbUnitDatabaseOperation(DbUnitTestContext testContext,
-                                                                              DatabaseOperation operation) {
-        var databaseOperation = testContext.getDatbaseOperationLookup().get(operation);
+    private org.dbunit.operation.DatabaseOperation getDbUnitDatabaseOperation(final DbUnitTestContext testContext,
+                                                                              final DatabaseOperation operation) {
+        final var databaseOperation = testContext.getDatbaseOperationLookup().get(operation);
 
         Assert.state(
             databaseOperation != null,
@@ -102,22 +110,22 @@ public class DatabaseUnitRunner extends DbUnitRunner {
 
         private final String connection;
 
-        public AnnotationAttributes(Annotation annotation) {
+        public AnnotationAttributes(final Annotation annotation) {
             Assert.state((annotation instanceof DatabaseSetup) || (annotation instanceof DatabaseTearDown),
                 "Only DatabaseSetup and DatabaseTearDown annotations are supported");
-            var attributes = AnnotationUtils.getAnnotationAttributes(annotation);
+            final var attributes = AnnotationUtils.getAnnotationAttributes(annotation);
 
             this.type = (DatabaseOperation) attributes.get("type");
             this.value = (String[]) attributes.get("value");
             this.connection = (String) attributes.get("connection");
         }
 
-        public static <T extends Annotation> Collection<AnnotationAttributes> get(Annotations<T> annotations) {
-            var annotationAttributes = new ArrayList<AnnotationAttributes>();
-            for (T annotation : annotations) {
-                annotationAttributes.add(new AnnotationAttributes(annotation));
+        public static <T extends Annotation> Collection<AnnotationAttributes> get(final Annotations<T> annotations) {
+            final var attributes = new ArrayList<AnnotationAttributes>();
+            for (final T annotation : annotations) {
+                attributes.add(new AnnotationAttributes(annotation));
             }
-            return annotationAttributes;
+            return attributes;
         }
 
     }
@@ -132,10 +140,12 @@ public class DatabaseUnitRunner extends DbUnitRunner {
 
         private final List<T> allAnnotations;
 
-        public Annotations(DbUnitTestContext context, Class<? extends Annotation> container, Class<T> annotation) {
+        public Annotations(final DbUnitTestContext context,
+                           final Class<? extends Annotation> container,
+                           final Class<T> annotation) {
             this.classAnnotations = getAnnotations(context.getTestClass(), container, annotation);
             this.methodAnnotations = getAnnotations(context.getTestMethod(), container, annotation);
-            var allAnnotations = new ArrayList<T>(this.classAnnotations.size() + this.methodAnnotations.size());
+            final var allAnnotations = new ArrayList<T>(this.classAnnotations.size() + this.methodAnnotations.size());
 
             allAnnotations.addAll(this.classAnnotations);
             allAnnotations.addAll(this.methodAnnotations);
@@ -143,9 +153,10 @@ public class DatabaseUnitRunner extends DbUnitRunner {
             this.allAnnotations = Collections.unmodifiableList(allAnnotations);
         }
 
-        private List<T> getAnnotations(AnnotatedElement element, Class<? extends Annotation> container,
-                                       Class<T> annotation) {
-            var annotations = new ArrayList<T>();
+        private List<T> getAnnotations(final AnnotatedElement element,
+                                       final Class<? extends Annotation> container,
+                                       final Class<T> annotation) {
+            final var annotations = new ArrayList<T>();
 
             addAnnotationToList(annotations, AnnotationUtils.findAnnotation(element, annotation));
             addRepeatableAnnotationsToList(annotations, AnnotationUtils.findAnnotation(element, container));
@@ -153,29 +164,30 @@ public class DatabaseUnitRunner extends DbUnitRunner {
             return Collections.unmodifiableList(annotations);
         }
 
-        private void addAnnotationToList(List<T> annotations, T annotation) {
+        private void addAnnotationToList(final List<T> annotations, final T annotation) {
             if (annotation != null) {
                 annotations.add(annotation);
             }
         }
 
-        @SuppressWarnings("unchecked")
-        private void addRepeatableAnnotationsToList(List<T> annotations, Annotation container) {
+        @SuppressWarnings({"unchecked"})
+        private void addRepeatableAnnotationsToList(final List<T> annotations, final Annotation container) {
             if (container != null) {
-                var value = (T[]) AnnotationUtils.getValue(container);
+                final var value = (T[]) AnnotationUtils.getValue(container);
                 assert value != null;
 
                 Collections.addAll(annotations, value);
             }
         }
 
+        @Override
         @NotNull
         public Iterator<T> iterator() {
             return this.allAnnotations.iterator();
         }
 
         @SuppressWarnings("unchecked")
-        private static <T extends Annotation> Annotations<T> get(DbUnitTestContext testContext) {
+        private static <T extends Annotation> Annotations<T> get(final DbUnitTestContext testContext) {
             return new Annotations<>(testContext, DatabaseSetups.class, (Class<T>) DatabaseSetup.class);
         }
     }

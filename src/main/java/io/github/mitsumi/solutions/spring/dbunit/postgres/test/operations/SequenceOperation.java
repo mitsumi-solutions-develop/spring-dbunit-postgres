@@ -1,11 +1,14 @@
 package io.github.mitsumi.solutions.spring.dbunit.postgres.test.operations;
 
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.IDataSet;
 
 @Slf4j
+@NoArgsConstructor
+@SuppressWarnings("PMD.CommentRequired")
 public class SequenceOperation extends AbstractDbOperation {
 
     private String sqlFormat() {
@@ -35,8 +38,11 @@ public class SequenceOperation extends AbstractDbOperation {
     }
 
     @Override
-    protected String sql(IDatabaseConnection connection, IDataSet dataSet, String tableName) throws DataSetException {
-        var rowCount = dataSet.getTable(tableName).getRowCount();
+    @SuppressWarnings("PMD.UseExplicitTypes")
+    protected String sql(final IDatabaseConnection connection,
+                         final IDataSet dataSet,
+                         final String tableName) throws DataSetException {
+        final var rowCount = dataSet.getTable(tableName).getRowCount();
         return rowCount == 0 ? null : String.format(sqlFormat(), tableName, rowCount);
     }
 }

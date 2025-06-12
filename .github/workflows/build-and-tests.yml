@@ -28,6 +28,8 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
+      - name: Source code check
+        run: mvn site
       - name: Test with Maven
         run: mvn test
 
