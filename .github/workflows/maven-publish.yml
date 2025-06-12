@@ -32,6 +32,9 @@ jobs:
         server-password: MAVEN_PASSWORD
         gpg-private-key: ${{ secrets.GPG_SIGNING_KEY }}
         gpg-passphrase: MAVEN_GPG_PASSPHRASE
+
+    - name: Source code check
+      run: mvn site
     - name: Test with Maven
       run: mvn test
     - name: Build with Maven

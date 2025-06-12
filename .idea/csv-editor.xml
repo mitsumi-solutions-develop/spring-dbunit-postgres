@@ -3,7 +3,14 @@
   <component name="CsvFileAttributes">
     <option name="attributeMap">
       <map>
-        <entry key="/src/test/resources/test-data/io.github.mitsumi.solutions.spring.dbunit.porstgres.test.TestDbUnit/tbl_user.csv">
+        <entry key="/.spring-dbunit-postgres-dev-container/database/postgresql/init/csv-data/demo-postgresql/UTF-8/0010-tbl_user.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="/src/test/resources/test-data/io.github.mitsumi.solutions.spring.dbunit.postgres.test.TestDbUnit/tbl_user.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
