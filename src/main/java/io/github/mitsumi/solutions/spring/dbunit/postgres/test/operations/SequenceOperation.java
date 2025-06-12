@@ -25,7 +25,7 @@ public class SequenceOperation extends AbstractDbOperation {
                     AND ccu.column_name = c.column_name
                   WHERE
                     constraint_type = 'PRIMARY KEY'
-                    and tc.table_name = %s
+                    and tc.table_name = '%s'
                 )
                 SELECT
                   setval(
