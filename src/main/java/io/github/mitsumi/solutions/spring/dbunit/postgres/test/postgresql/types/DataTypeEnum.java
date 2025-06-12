@@ -12,6 +12,7 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 @Getter
 @Accessors(fluent = true)
+@SuppressWarnings("PMD.CommentRequired")
 public enum DataTypeEnum {
 
     JSONB("jsonb", s -> s.equalsIgnoreCase("jsonb")),
@@ -21,10 +22,10 @@ public enum DataTypeEnum {
     private final String type;
     private final Predicate<String> predicate;
 
-    public static Optional<DataType> typeOf(String type) {
+    public static Optional<DataType> typeOf(final String type) {
         return Stream.of(values())
             .filter(dataType -> dataType.predicate.test(type))
-            .map(__ -> new CustomDataType(type))
+            .map(t -> new CustomDataType(type))
             .map(DataType.class::cast)
             .findFirst();
     }

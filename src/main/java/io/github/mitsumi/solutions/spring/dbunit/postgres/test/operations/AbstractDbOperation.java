@@ -1,5 +1,6 @@
 package io.github.mitsumi.solutions.spring.dbunit.postgres.test.operations;
 
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.dbunit.database.IDatabaseConnection;
@@ -13,24 +14,28 @@ import java.util.HashSet;
 import java.util.Stack;
 
 @Slf4j
+@NoArgsConstructor
+@SuppressWarnings({"PMD.UseExplicitTypes", "PMD.LawOfDemeter", "PMD.CommentRequired"})
 public abstract class AbstractDbOperation extends AbstractOperation {
 
     protected abstract String sql(IDatabaseConnection connection, IDataSet dataSet, String tableName) throws DataSetException;
 
     @Override
-    public void execute(IDatabaseConnection connection, IDataSet dataSet) throws SQLException {
+    public void execute(final IDatabaseConnection connection, final IDataSet dataSet)
+        throws SQLException, DataSetException {
+
         log.debug("execute(connection={}, dataSet={}) - start", connection, dataSet);
 
-        var databaseDataSet = connection.createDataSet();
-        var databaseConfig = connection.getConfig();
-        var statementFactory = (IStatementFactory) databaseConfig.getProperty("http://www.dbunit.org/properties/statementFactory");
-        var statement = statementFactory.createBatchStatement(connection);
+        final var databaseDataSet = connection.createDataSet();
+        final var databaseConfig = connection.getConfig();
+        final var statementFactory = (IStatementFactory) databaseConfig.getProperty("http://www.dbunit.org/properties/statementFactory");
+        final var statement = statementFactory.createBatchStatement(connection);
 
         try {
             int count = 0;
-            var tableNames = new Stack<String>();
-            var tablesSeen = new HashSet<String>();
-            var iterator = dataSet.iterator();
+            final var tableNames = new Stack<String>();
+            final var tablesSeen = new HashSet<String>();
+            final var iterator = dataSet.iterator();
 
             String tableName;
             while (iterator.next()) {
@@ -44,11 +49,11 @@ public abstract class AbstractDbOperation extends AbstractOperation {
             for (; !tableNames.isEmpty(); ++count) {
                 tableName = tableNames.pop();
 
-                var databaseMetaData = databaseDataSet.getTableMetaData(tableName);
+                final var databaseMetaData = databaseDataSet.getTableMetaData(tableName);
 
                 tableName = databaseMetaData.getTableName();
 
-                var sql = sql(connection, dataSet, tableName);
+                final var sql = sql(connection, dataSet, tableName);
 
                 if (StringUtils.isNotEmpty(sql)) {
                     statement.addBatch(sql);
@@ -62,8 +67,6 @@ public abstract class AbstractDbOperation extends AbstractOperation {
                 statement.executeBatch();
                 statement.clearBatch();
             }
-        } catch (Exception e) {
-            log.warn(e.getMessage());
         } finally {
             statement.close();
         }

@@ -6,7 +6,7 @@
 
     <groupId>io.github.mitsumi-solutions-develop</groupId>
     <artifactId>spring-dbunit-postgres</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <packaging>jar</packaging>
     <name>spring-dbunit-postgres</name>
     <description>spring-dbunit-postgres</description>
@@ -275,4 +275,18 @@
             </plugin>
         </plugins>
     </build>
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <version>3.26.0</version>
+                <configuration>
+                    <rulesets>
+                        <ruleset>${basedir}/pmd/spring-dbunit-postgres.xml</ruleset>
+                    </rulesets>
+                </configuration>
+            </plugin>
+        </plugins>
+    </reporting>
 </project>
