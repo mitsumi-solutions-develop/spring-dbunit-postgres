@@ -10,3 +10,14 @@
 # usage
 
 see: `TestDbUnit`
+
+# dependencies
+
+```xml
+<dependency>
+    <groupId>io.github.mitsumi-solutions-develop</groupId>
+    <artifactId>spring-dbunit-postgres</artifactId>
+    <version>1.0.2</version>
+    <scope>test</scope>
+</dependency>
+```
