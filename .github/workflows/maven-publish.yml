@@ -34,9 +34,9 @@ jobs:
         gpg-passphrase: MAVEN_GPG_PASSPHRASE
 
     - name: Source code check
-      run: mvn site
+      run: mvn clean pmd:check
     - name: Test with Maven
-      run: mvn test
+      run: mvn clean test
     - name: Build with Maven
       run: mvn -B package --file pom.xml
 
